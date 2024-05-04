@@ -1,6 +1,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using WinFormsApp1.Config;
 using WinFormsApp1.Models;
 using WinFormsApp1.Models.Requests;
@@ -52,9 +53,12 @@ namespace WinFormsApp1
             SetFakturNumber(context);
             SetComboBoxData(context);
             _orderItemsRequests = new List<OrderItemsRequest>();
-            //dataGridView1.DataSource = _orderItemsRequests;
+            dataGridView1.DataSource = _orderItemsRequests;
 
-
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {
+                column.ReadOnly = true;
+            }
         }
         private void SetComboBoxData(DrugStoreContext context)
         {
@@ -170,7 +174,7 @@ namespace WinFormsApp1
         private void addButton_Click(object sender, EventArgs e)
         {
             var request = new OrderItemsRequest(
-                dataGridView1.Rows.Count,
+                dataGridView1.Rows.Count + 1,
                    _selectedItem.Id,
                    _selectedItem.Name,
                    int.Parse(qtyTb.Text),
@@ -178,18 +182,72 @@ namespace WinFormsApp1
                 );
             _orderItemsRequests.Add(request);
 
-            //dataGridView1.Rows.Add(
-            //    dataGridView1.Rows.Count,
-            //    _selectedItem.Id,
-            //       _selectedItem.Name,
-            //       int.Parse(qtyTb.Text),
-            //       int.Parse(qtyTb.Text) * _selectedItem.Price
-            //    );
             dataGridView1.DataSource = typeof(List<OrderItemsRequest>);
             dataGridView1.DataSource = _orderItemsRequests;
-            //dataGridView1.DataSource = _orderItemsRequests;
+
+            int total = _orderItemsRequests.Aggregate(0, (sum, x) => sum + x.SubTotal);
+            var price = total.ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+            price = price.Substring(0, price.Length - 3);
+            price = price.Substring(2);
+            totalTB.Text = price;
         }
 
+        private void moneyTB_TextChanged(object sender, EventArgs e)
+        {
+            var money = int.Parse(moneyTB.Text.IsNullOrEmpty() ? "0" : moneyTB.Text);
+            //var qty = Int32.Parse(qtyTb.Text);
+
+            int total = _orderItemsRequests.Aggregate(0, (sum, x) => sum + x.SubTotal);
+            var priceNumber = (money - total);
+
+            if (priceNumber > 0)
+            {
+                var price = priceNumber.ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+                price = price.Substring(0, price.Length - 3);
+                price = price.Substring(2);
+                chanceTB.Text = price;
+            }
+            else
+            {
+                chanceTB.Text = "0";
+
+            }
+        }
+
+        private void moneyTB_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            //label1.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            if (e.ColumnIndex == 3)
+            {
+                var value = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                _orderItemsRequests.Select(item =>
+                {
+                    if (item.No == e.RowIndex + 1)
+                    {
+                        item.JmlBeli = (int) value;
+                        //int price = _orderItemsRequests.Where(req => )
+                        //item.SubTotal = item.JmlBeli * 
+                    }
+                    return item;
+                });
+
+            }
+            label1.Text = e.ColumnIndex.ToString();
+        }
     }
 
 }

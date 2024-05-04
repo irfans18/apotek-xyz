@@ -336,6 +336,7 @@
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(889, 199);
             dataGridView1.TabIndex = 16;
+            dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
             // 
             // label13
             // 
@@ -377,6 +378,7 @@
             totalTB.ReadOnly = true;
             totalTB.Size = new Size(174, 30);
             totalTB.TabIndex = 19;
+            totalTB.TextAlign = HorizontalAlignment.Right;
             // 
             // moneyTB
             // 
@@ -385,6 +387,9 @@
             moneyTB.Name = "moneyTB";
             moneyTB.Size = new Size(174, 30);
             moneyTB.TabIndex = 20;
+            moneyTB.TextAlign = HorizontalAlignment.Right;
+            moneyTB.TextChanged += moneyTB_TextChanged;
+            moneyTB.KeyPress += moneyTB_KeyPress;
             // 
             // chanceTB
             // 
@@ -395,6 +400,7 @@
             chanceTB.ReadOnly = true;
             chanceTB.Size = new Size(174, 30);
             chanceTB.TabIndex = 21;
+            chanceTB.TextAlign = HorizontalAlignment.Right;
             // 
             // Form1
             // 
