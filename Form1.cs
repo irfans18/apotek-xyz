@@ -1,10 +1,18 @@
+using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
+using System.Globalization;
 using WinFormsApp1.Config;
 using WinFormsApp1.Models;
+using WinFormsApp1.Models.Requests;
 
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
+        List<Stuff> _stuffList;
+        Stuff _selectedItem;
+        List<OrderItemsRequest> _orderItemsRequests;
+
         public Form1()
         {
             InitializeComponent();
@@ -38,15 +46,39 @@ namespace WinFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             var context = new DrugStoreContext();
-            var users = context.Users.ToList();
-            operatorTB.Text = users[0].Username;
-            setFakturDate();
-            setFakturNumber(context);
-            dataGridView1.DataSource = users;
-            
+            stuffIdCB.Focus();
+            SetOperator(context);
+            SetFakturDate();
+            SetFakturNumber(context);
+            SetComboBoxData(context);
+            _orderItemsRequests = new List<OrderItemsRequest>();
+            //dataGridView1.DataSource = _orderItemsRequests;
+
+
+        }
+        private void SetComboBoxData(DrugStoreContext context)
+        {
+
+            var stuffs = context.Stuffs.ToList();
+            stuffIdCB.Text = "Pilih Kode Barang";
+
+            _stuffList = new List<Stuff>(stuffs);
+            stuffs.ForEach(stuff =>
+            {
+                stuffIdCB.Items.Add(stuff);
+            });
+            //stuffIdCB.DataSource = stuffs;
+            stuffIdCB.DisplayMember = "Id";
+            stuffIdCB.ValueMember = "Name";
         }
 
-        private void setFakturNumber(DrugStoreContext context)
+        private void SetOperator(DrugStoreContext context)
+        {
+            var users = context.Users.ToList();
+            operatorTB.Text = users[0].Username;
+        }
+
+        private void SetFakturNumber(DrugStoreContext context)
         {
             var orders = context.Orders.ToList();
             var order = orders.Last();
@@ -62,9 +94,102 @@ namespace WinFormsApp1
             //noFakturTB.Text = fakturNumber.ToString();
             noFakturTB.Text = faktur.ToString();
         }
-        private void setFakturDate()
+        private void SetFakturDate()
         {
-            dateTB.Text = DateTime.Now.ToString("MMMM dd, yyyy");
+            dateTB.Text = DateTime.Now.ToString("dd MMM yyyy");
         }
+
+        private void ClearForm()
+        {
+            stuffIdCB.Text = "Pilih Kode Barang";
+            stuffNameTB.Clear();
+            stuffPriceTB.Clear();
+            subTotalTB.Clear();
+            qtyTb.Clear();
+        }
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+        private void stuffIdCB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var index = stuffIdCB.SelectedIndex;
+            if (index < 0) _selectedItem = new Stuff();
+            else
+            {
+                var item = _stuffList[index];
+                _selectedItem = item;
+                var price = item.Price.ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+                price = price.Substring(0, price.Length - 3);
+                price = price.Substring(2);
+
+                stuffNameTB.Text = item.Name;
+                stuffPriceTB.Text = price;
+
+
+                var qty = Int32.Parse(qtyTb.Text.IsNullOrEmpty() ? "0" : qtyTb.Text);
+                subTotalTB.Text = (qty * item.Price).ToString();
+            }
+        }
+
+
+        private void qtyTb_TextChanged(object sender, EventArgs e)
+        {
+            var qty = int.Parse(qtyTb.Text.IsNullOrEmpty() ? "0" : qtyTb.Text);
+            //var qty = Int32.Parse(qtyTb.Text);
+
+            var priceNumber = (qty * _selectedItem.Price);
+            var price = priceNumber.ToString("C", CultureInfo.CreateSpecificCulture("id-ID"));
+            price = price.Substring(0, price.Length - 3);
+            price = price.Substring(2);
+            subTotalTB.Text = price;
+
+        }
+
+        private void qtyTb_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            ClearForm();
+        }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            var request = new OrderItemsRequest(
+                dataGridView1.Rows.Count,
+                   _selectedItem.Id,
+                   _selectedItem.Name,
+                   int.Parse(qtyTb.Text),
+                   int.Parse(qtyTb.Text) * _selectedItem.Price
+                );
+            _orderItemsRequests.Add(request);
+
+            //dataGridView1.Rows.Add(
+            //    dataGridView1.Rows.Count,
+            //    _selectedItem.Id,
+            //       _selectedItem.Name,
+            //       int.Parse(qtyTb.Text),
+            //       int.Parse(qtyTb.Text) * _selectedItem.Price
+            //    );
+            dataGridView1.DataSource = typeof(List<OrderItemsRequest>);
+            dataGridView1.DataSource = _orderItemsRequests;
+            //dataGridView1.DataSource = _orderItemsRequests;
+        }
+
     }
+
 }

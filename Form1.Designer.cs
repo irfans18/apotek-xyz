@@ -34,9 +34,9 @@
             label4 = new Label();
             label5 = new Label();
             groupBox1 = new GroupBox();
+            stuffPriceTB = new TextBox();
             subTotalTB = new TextBox();
             qtyTb = new TextBox();
-            stuffPriceTB = new TextBox();
             stuffNameTB = new TextBox();
             stuffIdCB = new ComboBox();
             label10 = new Label();
@@ -117,9 +117,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(stuffPriceTB);
             groupBox1.Controls.Add(subTotalTB);
             groupBox1.Controls.Add(qtyTb);
-            groupBox1.Controls.Add(stuffPriceTB);
             groupBox1.Controls.Add(stuffNameTB);
             groupBox1.Controls.Add(stuffIdCB);
             groupBox1.Controls.Add(label10);
@@ -133,14 +133,26 @@
             groupBox1.TabIndex = 5;
             groupBox1.TabStop = false;
             // 
+            // stuffPriceTB
+            // 
+            stuffPriceTB.BackColor = SystemColors.Info;
+            stuffPriceTB.Font = new Font("Segoe UI", 10F);
+            stuffPriceTB.Location = new Point(437, 50);
+            stuffPriceTB.Name = "stuffPriceTB";
+            stuffPriceTB.ReadOnly = true;
+            stuffPriceTB.Size = new Size(140, 30);
+            stuffPriceTB.TabIndex = 19;
+            // 
             // subTotalTB
             // 
+            subTotalTB.BackColor = SystemColors.Info;
             subTotalTB.Font = new Font("Segoe UI", 10F);
             subTotalTB.Location = new Point(704, 50);
             subTotalTB.Name = "subTotalTB";
             subTotalTB.ReadOnly = true;
             subTotalTB.Size = new Size(174, 30);
             subTotalTB.TabIndex = 18;
+            subTotalTB.TextAlign = HorizontalAlignment.Right;
             // 
             // qtyTb
             // 
@@ -149,18 +161,13 @@
             qtyTb.Name = "qtyTb";
             qtyTb.Size = new Size(94, 30);
             qtyTb.TabIndex = 17;
-            // 
-            // stuffPriceTB
-            // 
-            stuffPriceTB.Font = new Font("Segoe UI", 10F);
-            stuffPriceTB.Location = new Point(437, 49);
-            stuffPriceTB.Name = "stuffPriceTB";
-            stuffPriceTB.ReadOnly = true;
-            stuffPriceTB.Size = new Size(144, 30);
-            stuffPriceTB.TabIndex = 16;
+            qtyTb.TextAlign = HorizontalAlignment.Right;
+            qtyTb.TextChanged += qtyTb_TextChanged;
+            qtyTb.KeyPress += qtyTb_KeyPress;
             // 
             // stuffNameTB
             // 
+            stuffNameTB.BackColor = SystemColors.Info;
             stuffNameTB.Font = new Font("Segoe UI", 10F);
             stuffNameTB.Location = new Point(205, 49);
             stuffNameTB.Name = "stuffNameTB";
@@ -176,6 +183,7 @@
             stuffIdCB.Name = "stuffIdCB";
             stuffIdCB.Size = new Size(180, 31);
             stuffIdCB.TabIndex = 16;
+            stuffIdCB.SelectedIndexChanged += stuffIdCB_SelectedIndexChanged;
             // 
             // label10
             // 
@@ -256,6 +264,7 @@
             cancelButton.TabIndex = 9;
             cancelButton.Text = "Cancel";
             cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += cancelButton_Click;
             // 
             // addButton
             // 
@@ -265,6 +274,7 @@
             addButton.TabIndex = 10;
             addButton.Text = "Add";
             addButton.UseVisualStyleBackColor = true;
+            addButton.Click += addButton_Click;
             // 
             // exitButton
             // 
@@ -274,6 +284,7 @@
             exitButton.TabIndex = 11;
             exitButton.Text = "Exit";
             exitButton.UseVisualStyleBackColor = true;
+            exitButton.Click += exitButton_Click;
             // 
             // saveVutton
             // 
@@ -286,6 +297,7 @@
             // 
             // noFakturTB
             // 
+            noFakturTB.BackColor = SystemColors.Info;
             noFakturTB.Font = new Font("Segoe UI", 10F);
             noFakturTB.Location = new Point(159, 89);
             noFakturTB.Name = "noFakturTB";
@@ -295,6 +307,7 @@
             // 
             // dateTB
             // 
+            dateTB.BackColor = SystemColors.Info;
             dateTB.Font = new Font("Segoe UI", 10F);
             dateTB.Location = new Point(159, 125);
             dateTB.Name = "dateTB";
@@ -305,6 +318,7 @@
             // 
             // operatorTB
             // 
+            operatorTB.BackColor = SystemColors.Info;
             operatorTB.Font = new Font("Segoe UI", 10F);
             operatorTB.Location = new Point(775, 89);
             operatorTB.Name = "operatorTB";
@@ -356,6 +370,7 @@
             // 
             // totalTB
             // 
+            totalTB.BackColor = SystemColors.Info;
             totalTB.Font = new Font("Segoe UI", 10F);
             totalTB.Location = new Point(758, 549);
             totalTB.Name = "totalTB";
@@ -373,6 +388,7 @@
             // 
             // chanceTB
             // 
+            chanceTB.BackColor = SystemColors.Info;
             chanceTB.Font = new Font("Segoe UI", 10F);
             chanceTB.Location = new Point(758, 632);
             chanceTB.Name = "chanceTB";
@@ -442,7 +458,6 @@
         private ComboBox stuffIdCB;
         private TextBox subTotalTB;
         private TextBox qtyTb;
-        private TextBox stuffPriceTB;
         private TextBox stuffNameTB;
         private DataGridView dataGridView1;
         private Label label13;
@@ -451,5 +466,6 @@
         private TextBox totalTB;
         private TextBox moneyTB;
         private TextBox chanceTB;
+        private TextBox stuffPriceTB;
     }
 }

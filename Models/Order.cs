@@ -11,7 +11,7 @@ namespace WinFormsApp1.Models
         public int Id { get; set; }
         public string FakturNo { get; set; }
         public DateTime Date { get; set;}
-        public User User { get; set; }
+        public User? User { get; set; }
 
         public ICollection<OrderDetail> Details { get; set; }
     }

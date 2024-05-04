@@ -12,7 +12,7 @@ using WinFormsApp1.Config;
 namespace WinFormsApp1.Migrations
 {
     [DbContext(typeof(DrugStoreContext))]
-    [Migration("20240504153341_InitialCreate")]
+    [Migration("20240504172437_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -64,8 +64,8 @@ namespace WinFormsApp1.Migrations
                     b.Property<int>("Qty")
                         .HasColumnType("int");
 
-                    b.Property<int>("StuffId")
-                        .HasColumnType("int");
+                    b.Property<string>("StuffId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TransactionId")
                         .HasColumnType("int");
@@ -81,11 +81,8 @@ namespace WinFormsApp1.Migrations
 
             modelBuilder.Entity("WinFormsApp1.Models.Stuff", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -135,9 +132,7 @@ namespace WinFormsApp1.Migrations
                 {
                     b.HasOne("WinFormsApp1.Models.Stuff", "Stuff")
                         .WithMany()
-                        .HasForeignKey("StuffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StuffId");
 
                     b.HasOne("WinFormsApp1.Models.Order", "Transaction")
                         .WithMany("Details")

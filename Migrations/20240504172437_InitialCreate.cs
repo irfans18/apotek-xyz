@@ -15,8 +15,7 @@ namespace WinFormsApp1.Migrations
                 name: "Stuffs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false)
                 },
@@ -67,7 +66,7 @@ namespace WinFormsApp1.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TransactionId = table.Column<int>(type: "int", nullable: false),
-                    StuffId = table.Column<int>(type: "int", nullable: false),
+                    StuffId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Price = table.Column<int>(type: "int", nullable: false),
                     Qty = table.Column<int>(type: "int", nullable: false)
                 },
@@ -84,8 +83,7 @@ namespace WinFormsApp1.Migrations
                         name: "FK_Details_Stuffs_StuffId",
                         column: x => x.StuffId,
                         principalTable: "Stuffs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
