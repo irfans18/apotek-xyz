@@ -182,15 +182,10 @@ namespace WinFormsApp1
 
         private void createOrder()
         {
-            var orderRequest = new OrderRequest(
-                DateTime.Now.ToLocalTime(),
-                 _orderItemsRequests
-                );
-
             List<OrderDetail> details = new List<OrderDetail>();
             Order order = new Order(
                     fakturNo: noFakturTB.Text,
-                    new DateTime()
+                    DateTime.Now.ToLocalTime()
                 );
             _context.Orders.Add(order);
             _context.SaveChanges();
