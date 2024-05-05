@@ -12,7 +12,7 @@ using WinFormsApp1.Config;
 namespace WinFormsApp1.Migrations
 {
     [DbContext(typeof(DrugStoreContext))]
-    [Migration("20240504172437_InitialCreate")]
+    [Migration("20240505023042_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -29,120 +29,116 @@ namespace WinFormsApp1.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("faktur_date");
 
                     b.Property<string>("FakturNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("faktur_no");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
+                    b.ToTable("t_orders");
                 });
 
             modelBuilder.Entity("WinFormsApp1.Models.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("price");
 
                     b.Property<int>("Qty")
+                        .HasColumnType("int")
+                        .HasColumnName("qty");
+
+                    b.Property<int>("order_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("StuffId")
+                    b.Property<string>("stuff_id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("TransactionId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StuffId");
+                    b.HasIndex("order_id");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("stuff_id");
 
-                    b.ToTable("Details");
+                    b.ToTable("t_order_details");
                 });
 
             modelBuilder.Entity("WinFormsApp1.Models.Stuff", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("price");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stuffs");
+                    b.ToTable("m_stuffs");
                 });
 
             modelBuilder.Entity("WinFormsApp1.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("password");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("username");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("WinFormsApp1.Models.Order", b =>
-                {
-                    b.HasOne("WinFormsApp1.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.ToTable("m_users");
                 });
 
             modelBuilder.Entity("WinFormsApp1.Models.OrderDetail", b =>
                 {
-                    b.HasOne("WinFormsApp1.Models.Stuff", "Stuff")
-                        .WithMany()
-                        .HasForeignKey("StuffId");
-
-                    b.HasOne("WinFormsApp1.Models.Order", "Transaction")
+                    b.HasOne("WinFormsApp1.Models.Order", "Order")
                         .WithMany("Details")
-                        .HasForeignKey("TransactionId")
+                        .HasForeignKey("order_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Stuff");
+                    b.HasOne("WinFormsApp1.Models.Stuff", "Stuff")
+                        .WithMany()
+                        .HasForeignKey("stuff_id");
 
-                    b.Navigation("Transaction");
+                    b.Navigation("Order");
+
+                    b.Navigation("Stuff");
                 });
 
             modelBuilder.Entity("WinFormsApp1.Models.Order", b =>

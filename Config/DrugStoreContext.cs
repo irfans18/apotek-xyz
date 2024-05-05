@@ -17,7 +17,7 @@ namespace WinFormsApp1.Config
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     {
-        optionsBuilder.UseSqlServer(@"Data Source=localhost;Initial Catalog=Test;Integrated Security=True;Trust Server Certificate=True");
+        optionsBuilder.UseSqlServer(@"Data Source=localhost;Initial Catalog=drug_store;Integrated Security=True;Trust Server Certificate=True");
     }
     }
 

@@ -49,7 +49,7 @@
             cancelButton = new Button();
             addButton = new Button();
             exitButton = new Button();
-            saveVutton = new Button();
+            saveButton = new Button();
             noFakturTB = new TextBox();
             dateTB = new TextBox();
             operatorTB = new TextBox();
@@ -286,14 +286,16 @@
             exitButton.UseVisualStyleBackColor = true;
             exitButton.Click += exitButton_Click;
             // 
-            // saveVutton
+            // saveButton
             // 
-            saveVutton.Location = new Point(838, 676);
-            saveVutton.Name = "saveVutton";
-            saveVutton.Size = new Size(94, 29);
-            saveVutton.TabIndex = 12;
-            saveVutton.Text = "Save";
-            saveVutton.UseVisualStyleBackColor = true;
+            saveButton.Enabled = false;
+            saveButton.Location = new Point(838, 676);
+            saveButton.Name = "saveButton";
+            saveButton.Size = new Size(94, 29);
+            saveButton.TabIndex = 12;
+            saveButton.Text = "Save";
+            saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += saveButton_Click;
             // 
             // noFakturTB
             // 
@@ -329,10 +331,14 @@
             // 
             // dataGridView1
             // 
-            dataGridView1.AllowUserToOrderColumns = true;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Enabled = false;
             dataGridView1.Location = new Point(43, 337);
             dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(889, 199);
             dataGridView1.TabIndex = 16;
@@ -379,6 +385,7 @@
             totalTB.Size = new Size(174, 30);
             totalTB.TabIndex = 19;
             totalTB.TextAlign = HorizontalAlignment.Right;
+            totalTB.TextChanged += totalTB_TextChanged;
             // 
             // moneyTB
             // 
@@ -417,7 +424,7 @@
             Controls.Add(operatorTB);
             Controls.Add(dateTB);
             Controls.Add(noFakturTB);
-            Controls.Add(saveVutton);
+            Controls.Add(saveButton);
             Controls.Add(exitButton);
             Controls.Add(addButton);
             Controls.Add(cancelButton);
@@ -432,6 +439,7 @@
             Name = "Form1";
             Text = "Data Transaksi";
             Load += Form1_Load;
+            Click += saveButton_Click;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -457,7 +465,7 @@
         private Button cancelButton;
         private Button addButton;
         private Button exitButton;
-        private Button saveVutton;
+        private Button saveButton;
         private TextBox noFakturTB;
         private TextBox dateTB;
         private TextBox operatorTB;
