@@ -16,7 +16,7 @@ Tech Stack :
 - [x] MsSQL
 - [x] EntityFramework
 
-NB : backup database terdapat pada directory Resources
+NB : backup database terdapat pada directory `Resources`
 
 Features :
 - [x] Auto Generate Faktur Number
